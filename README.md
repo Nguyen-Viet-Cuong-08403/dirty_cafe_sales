@@ -9,8 +9,8 @@ CREATE TABLE dirty_cafe_sales (
     Transaction_ID NVARCHAR(50) PRIMARY KEY,
     Item NVARCHAR(100),
     Quantity INT,
-    Price_Per_Unit float,
-    Total_Spent float,
+    Price_Per_Unit FLOAT,
+    Total_Spent FLOAT,
     Payment_Method NVARCHAR(50),
     Location NVARCHAR(50),
     Transaction_Date DATETIME
@@ -150,8 +150,8 @@ WHERE Total_Spent IS NOT NULL;
 ```sql
 WITH stats AS (
     SELECT 
-        PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY Price_Per_Unit) over() AS Q1,
-        PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY Price_Per_Unit) over() AS Q3
+        PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY Price_Per_Unit) OVER () AS Q1,
+        PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY Price_Per_Unit) OVER () AS Q3
     FROM dirty_cafe_sales
 )
 SELECT 
@@ -160,13 +160,90 @@ FROM dirty_cafe_sales, stats
 WHERE Price_Per_Unit < (Q1 - 1.5 * (Q3 - Q1))
    OR Price_Per_Unit > (Q3 + 1.5 * (Q3 - Q1)) 
 ```
+**Khám phá dữ liệu EDA**
+-- Tiến hành trả lời các câu hỏi để tìm ra được insight
 
+**Câu 1: Phân phối doanh thu và số lượng giao dịch theo mặt hàng (Item) là như thế nào?**
 
+```sql
+SELECT Item, SUM(Total_Spent) AS Tổng_doanh_thu, COUNT(Transaction_ID) AS Số_Lượng_Giao_Dịch
+FROM dirty_cafe_sales
+GROUP BY Item
+ORDER BY SUM(Total_Spent) DESC
+```
+**Câu 2: Trung bình số lượng (Quantity) mua trong mỗi giao dịch của từng mặt hàng là bao nhiêu?**
 
+```sql
+SELECT Item, avg(Quantity) AS Số_Lượng_hàng_trung_bình
+FROM dirty_cafe_sales
+GROUP BY Item
+```
 
+**Câu 3: Tỷ lệ giao dịch và doanh thu giữa In-store và Takeaway là bao nhiêu?**
 
+```sql
+WITH table_1 AS (
+SELECT Location as Hình_thức, sum(Total_Spent) AS Tổng_doanh_thu, count(Transaction_ID) AS Số_lượng_đơn
+FROM dirty_cafe_sales
+GROUP BY Location
+), table_2 AS (
+SELECT *, LAG(Số_lượng_đơn, 1) OVER (order by Số_lượng_đơn DESC) AS Số_lượng_đơn_1
+FROM table_1
+)
+SELECT *, CAST(Số_lượng_đơn as decimal(10,2))/ (Số_lượng_đơn + Số_lượng_đơn_1) AS Tỉ_lệ_Instore_Takeaway
+FROM table_2
+```
+**Câu 4: Những mặt hàng nào được mua nhiều ở In-store và Takeaway**
 
+```sql
+select Location AS Hình_thức, Item, count(Transaction_ID) AS Số_Lượng_Đơn
+FROM dirty_cafe_sales
+GROUP BY Location, Item
+ORDER BY Location DESC
+```
 
+**Câu 5: Phương thức thanh toán nào được sử dụng nhiều nhất và có xu hướng thay đổi theo thời gian không?**
+
+```sql
+SELECT month(Transaction_Date) AS Tháng, Payment_Method as Phương_thức, COUNT(Transaction_ID) AS Số_lương
+FROM dirty_cafe_sales
+GROUP BY Payment_Method, month(Transaction_Date)
+ORDER BY month(Transaction_Date) ASC
+```
+**Câu 6: Tỷ lệ phần trăm giao dịch của từng phương thức thanh toán (Credit Card, Cash, Digital Wallet) là bao nhiêu?**
+
+```sql
+WITH table_1 AS (
+SELECT  Payment_Method AS Phương_thức, count(Transaction_ID) AS Số_lương, 
+   (SELECT COUNT(*)
+     FROM dirty_cafe_sales) AS Tổng_số_lượng
+FROM dirty_cafe_sales
+GROUP BY Payment_Method
+)
+SELECT *, CAST(Số_lương as decimal(10,2))/Tổng_số_lượng as tỉ_lệ
+FROM table_1
+```
+**Câu 8: Doanh thu và số lượng giao dịch thay đổi như thế nào theo thời gian (theo tháng)?**
+
+```sql
+SELECT MONTH(Transaction_Date) AS Tháng, SUM(Total_Spent) AS Tổng_doanh_thu, COUNT(Transaction_ID) AS Số_Lượng_Giao_Dịch
+FROM dirty_cafe_sales
+GROUP BY MONTH(Transaction_Date)
+ORDER BY MONTH(Transaction_Date) ASC
+```
+**Câu 9: Mối quan hệ giữa mặt hàng (Item) và địa điểm (Location) hoặc phương thức thanh toán (Payment_Method) là gì?**
+
+```sql
+SELECT 
+    Item,
+    Location,
+    Payment_Method,
+    COUNT(*) AS transaction_count,
+    SUM(Total_Spent) AS total_revenue
+FROM dirty_cafe_sales
+GROUP BY Item, Location, Payment_Method
+ORDER BY transaction_count DESC
+```
 
 
 
