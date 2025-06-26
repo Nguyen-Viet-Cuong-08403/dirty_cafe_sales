@@ -6,13 +6,75 @@ Mục tiêu chính của dự án này là làm sạch và phân tích tập d�
 ## SQL Code for Table Creation
 ```sql
 CREATE TABLE dirty_cafe_sales (
-    Transaction_ID VARCHAR(50) PRIMARY KEY,
-    Item VARCHAR(100),
+    Transaction_ID NVARCHAR(50) PRIMARY KEY,
+    Item NVARCHAR(100),
     Quantity INT,
-    Price_Per_Unit DECIMAL(10, 2),
-    Total_Spent DECIMAL(10, 2),
-    Payment_Method VARCHAR(50),
-    Location VARCHAR(50),
+    Price_Per_Unit float,
+    Total_Spent float,
+    Payment_Method NVARCHAR(50),
+    Location NVARCHAR(50),
     Transaction_Date DATETIME
-);
+```
+## Data Analysis & Findings
+
+### 1. Xử lí dữ liệu (Data Cleaning)
+Quá trình xử lí dữ liệu gồm 4 bước sau:
+1. Xử lí các giá trị thiếu (NULL, trống, "UNKNOWN", hoặc "ERROR")
+2. Kiểm tra giá trị trùng lặp => thường là khóa chính
+3. Chuyển hóa kiểu dữ liệu
+4.  Kiểm tra bất thường của dữ liệu và dữ liệu ngoại lai
+
+**Process**
+```sql
+-- 1.1. Chuyển các giá trị trống, "UNKNOWN" hoăc "ERROR" thành Null
+UPDATE dirty_cafe_sales
+SET Item = NULL -- Cột Item
+WHERE Item IN ('ERROR', 'UNKNOWN', '')
+-- Cột Quantity 
+ALTER TABLE dirty_cafe_sales
+ALTER COLUMN Quantity VARCHAR(50); -- Chuyển dữ liệu cột Quantity từ tinyint sang varchar(50)
+UPDATE dirty_cafe_sales
+SET Quantity = NULL
+WHERE Quantity IN ('ERROR', 'UNKNOWN', '') OR Quantity IS NULL -- chuyển giá trị trống, "UNKNOWN" hoăc "ERROR" thành Null
+UPDATE dirty_cafe_sales
+SET Quantity = CASE 
+    WHEN ISNUMERIC(Quantity) = 1 THEN Quantity 
+    ELSE NULL 
+END; 
+ALTER TABLE dirty_cafe_sales
+ALTER COLUMN Quantity INT; -- cập nhật lại kiểu dữ liệu 
+-- Thêm giá trị vào cột Total_Spent nào là NUll = Quantity * Price_Per_Unit
+UPDATE dirty_cafe_sales
+SET Total_Spent = Quantity * Price_Per_Unit
+WHERE Total_Spent is NULL and Quantity is not null and Price_Per_Unit is not null 
+-- Cột Payment_Method
+UPDATE dirty_cafe_sales
+SET Payment_Method = NULL
+WHERE Payment_Method IN ('ERROR', 'UNKNOWN', '')
+-- Cột Location
+UPDATE dirty_cafe_sales
+SET Location = NULL
+WHERE Location IN ('ERROR', 'UNKNOWN', '')
+-- 1.2. Tính toán số lượng Null trên tổng số dữ liệu 
+SELECT COUNT(*) AS total_rows_with_null
+FROM dirty_cafe_sales
+WHERE  Item IS NULL
+   OR Quantity IS NULL
+   OR Price_Per_Unit IS NULL
+   OR Total_Spent IS NULL
+   OR Payment_Method IS NULL
+   OR Location IS NULL
+   OR Transaction_Date IS NULL;
+-- Tổng số lượng cột 
+SELECT COUNT(*) AS total_rows
+FROM dirty_cafe_sales 
+-- Vì tỷ lệ % quá thấp chỉ dưới 1% nên quyết định là xóa 
+DELETE FROM dirty_cafe_sales
+WHERE Item IS NULL
+   OR Quantity IS NULL
+   OR Price_Per_Unit IS NULL
+   OR Total_Spent IS NULL
+   OR Payment_Method IS NULL
+   OR Location IS NULL
+   OR Transaction_Date IS NULL;
 ```
