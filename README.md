@@ -275,7 +275,11 @@ Sự vượt trội của hình thức mang đi (Takeaway) (60% giao dịch, 65%
 
 Xu hướng tăng sử dụng Ví điện tử (từ 10% lên 30% trong năm 2023, chiếm 50% trong các giao dịch Takeaway) cho thấy sự chuyển dịch rõ rệt sang thanh toán kỹ thuật số. Tôi đề xuất hợp tác với các nền tảng ví điện tử (ví dụ: Momo, ZaloPay) để cung cấp các ưu đãi độc quyền, đặc biệt cho khách hàng Takeaway, từ đó tận dụng xu hướng này và có khả năng tăng doanh thu thêm 5–10%.
 
+**5. TÓM LẠI**
 
+Dự án này thể hiện rõ năng lực của tôi trong việc viết truy vấn SQL, xử lý dữ liệu và chuyển hóa dữ liệu thành giá trị kinh doanh — những kỹ năng thiết yếu đối với vai trò chuyên viên phân tích dữ liệu. Tôi rất háo hức được áp dụng những kỹ năng này vào các thách thức thực tế, và kho lưu trữ này là minh chứng cho sự sẵn sàng của tôi trong việc đóng góp cho các quyết định dựa trên dữ liệu tại tổ chức của bạn.
+
+Xin cảm ơn vì đã xem qua dự án của tôi!
 
 
 
