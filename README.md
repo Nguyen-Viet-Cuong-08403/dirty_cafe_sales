@@ -25,6 +25,7 @@ Quá trình xử lí dữ liệu gồm 4 bước sau:
 4.  Kiểm tra bất thường của dữ liệu và dữ liệu ngoại lai
 
 **Process**
+
 ***1.Xử lí các giá trị thiếu (NULL, trống, "UNKNOWN", hoặc "ERROR")***
 
 ***1.1. Chuyển các giá trị trống, "UNKNOWN" hoăc "ERROR" thành Null***
