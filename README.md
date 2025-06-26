@@ -248,13 +248,33 @@ ORDER BY transaction_count DESC
 **3. KẾT QUẢ**
 
 **3.1. Sở thích sản phẩm** 
+
 Phân tích cho thấy Smoothie và Sandwich là hai mặt hàng bán chạy nhất, chiếm lần lượt 25% và 20% tổng số giao dịch, với tổng đóng góp doanh thu lên tới 50%. Số lượng trung bình mỗi giao dịch đối với Smoothie là 3.0 đơn vị, cho thấy xu hướng mua số lượng lớn, trong khi Sandwich có trung bình 2.0 đơn vị. Đáng chú ý, Smoothie và Sandwich thường được mua cùng nhau trong 150 giao dịch, phản ánh xu hướng kết hợp mạnh mẽ giữa hai sản phẩm này.
 
 **3.2. Hành vi theo địa điểm**
+
 Hình thức mang đi (Takeaway) chiếm ưu thế với 60% số giao dịch và 65% tổng doanh thu (12.000 đô la), so với dùng tại chỗ (In-store) với 40% giao dịch và 35% doanh thu (6.500 đô la). Doanh thu trung bình mỗi giao dịch ở hình thức Takeaway cao hơn ($4.00) so với In-store ($3.25), cho thấy khách hàng chi tiêu nhiều hơn cho mỗi đơn hàng mang đi. Smoothie phổ biến hơn trong các giao dịch Takeaway (chiếm 40% doanh số của sản phẩm này), trong khi Coffee dẫn đầu trong các giao dịch In-store (chiếm 30% doanh số của Coffee).
 
 **3.3. Xu hướng phương thức thanh toán** 
+
 Ví điện tử là phương thức thanh toán được sử dụng nhiều nhất, chiếm 40% số giao dịch, tiếp theo là tiền mặt (35%) và thẻ tín dụng (25%). Theo thời gian, việc sử dụng ví điện tử đã tăng từ 10% vào tháng 1 năm 2023 lên 30% vào tháng 12 năm 2023, cho thấy xu hướng chuyển dịch sang thanh toán số. Xu hướng này rõ rệt hơn trong các giao dịch Takeaway, nơi ví điện tử chiếm tới 50% phương thức thanh toán.
+
+**4. ĐỀ XUẤT** 
+
+Dựa trên kết quả phân tích, các đề xuất sau đây được đưa ra nhằm tối ưu hóa chiến lược kinh doanh của quán cà phê:
+
+**4.1. Tối ưu hóa sản phẩm**
+
+Smoothie và Sandwich nổi bật là các sản phẩm chủ lực nhờ số lượng giao dịch cao và thường xuyên được mua cùng nhau (150 trường hợp). Đề xuất triển khai chương trình Combo Smoothie + Sandwich với mức giảm giá 10% để thúc đẩy doanh số và khuyến khích khách hàng mua nhiều, tận dụng xu hướng số lượng trung bình mỗi giao dịch (Smoothie: 3.0; Sandwich: 2.0).
+
+**4.2. Hiệu quả theo địa điểm**
+
+Sự vượt trội của hình thức mang đi (Takeaway) (60% giao dịch, 65% doanh thu) cho thấy cần cải thiện tốc độ xử lý đơn hàng, chẳng hạn như tăng cường nhân sự vào giờ cao điểm cuối tuần (lượng đơn tăng 20%). Đối với dùng tại chỗ (In-store), nơi Coffee được ưa chuộng, có thể áp dụng chiến lược bán thêm (upsell), ví dụ như kết hợp Coffee với Cookie, nhằm tăng giá trị trung bình mỗi giao dịch từ mức hiện tại là 3,25 đô la.
+
+**4.3. Chiến lược thanh toán** 
+
+Xu hướng tăng sử dụng Ví điện tử (từ 10% lên 30% trong năm 2023, chiếm 50% trong các giao dịch Takeaway) cho thấy sự chuyển dịch rõ rệt sang thanh toán kỹ thuật số. Tôi đề xuất hợp tác với các nền tảng ví điện tử (ví dụ: Momo, ZaloPay) để cung cấp các ưu đãi độc quyền, đặc biệt cho khách hàng Takeaway, từ đó tận dụng xu hướng này và có khả năng tăng doanh thu thêm 5–10%.
+
 
 
 
