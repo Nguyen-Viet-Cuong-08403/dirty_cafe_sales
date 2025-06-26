@@ -26,36 +26,46 @@ Quá trình xử lí dữ liệu gồm 4 bước sau:
 
 **Process**
 ```sql
--- 1.1. Chuyển các giá trị trống, "UNKNOWN" hoăc "ERROR" thành Null
+***1.1. Chuyển các giá trị trống, "UNKNOWN" hoăc "ERROR" thành Null***
+--Cột Item
 UPDATE dirty_cafe_sales
 SET Item = NULL -- Cột Item
 WHERE Item IN ('ERROR', 'UNKNOWN', '')
+
 -- Cột Quantity 
 ALTER TABLE dirty_cafe_sales
 ALTER COLUMN Quantity VARCHAR(50); -- Chuyển dữ liệu cột Quantity từ tinyint sang varchar(50)
+
 UPDATE dirty_cafe_sales
 SET Quantity = NULL
 WHERE Quantity IN ('ERROR', 'UNKNOWN', '') OR Quantity IS NULL -- chuyển giá trị trống, "UNKNOWN" hoăc "ERROR" thành Null
+
 UPDATE dirty_cafe_sales
 SET Quantity = CASE 
     WHEN ISNUMERIC(Quantity) = 1 THEN Quantity 
     ELSE NULL 
-END; 
+END;
+
 ALTER TABLE dirty_cafe_sales
-ALTER COLUMN Quantity INT; -- cập nhật lại kiểu dữ liệu 
+ALTER COLUMN Quantity INT; -- cập nhật lại kiểu dữ liệu
+
 -- Thêm giá trị vào cột Total_Spent nào là NUll = Quantity * Price_Per_Unit
 UPDATE dirty_cafe_sales
 SET Total_Spent = Quantity * Price_Per_Unit
-WHERE Total_Spent is NULL and Quantity is not null and Price_Per_Unit is not null 
+WHERE Total_Spent is NULL and Quantity is not null and Price_Per_Unit is not null
+
 -- Cột Payment_Method
 UPDATE dirty_cafe_sales
 SET Payment_Method = NULL
 WHERE Payment_Method IN ('ERROR', 'UNKNOWN', '')
+
 -- Cột Location
 UPDATE dirty_cafe_sales
 SET Location = NULL
 WHERE Location IN ('ERROR', 'UNKNOWN', '')
--- 1.2. Tính toán số lượng Null trên tổng số dữ liệu 
+```
+***1.2. Tính toán số lượng Null trên tổng số dữ liệu***
+```sql
 SELECT COUNT(*) AS total_rows_with_null
 FROM dirty_cafe_sales
 WHERE  Item IS NULL
