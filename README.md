@@ -25,8 +25,11 @@ Quá trình xử lí dữ liệu gồm 4 bước sau:
 4.  Kiểm tra bất thường của dữ liệu và dữ liệu ngoại lai
 
 **Process**
-```sql
+***1.Xử lí các giá trị thiếu (NULL, trống, "UNKNOWN", hoặc "ERROR")***
+
 ***1.1. Chuyển các giá trị trống, "UNKNOWN" hoăc "ERROR" thành Null***
+
+```sql
 --Cột Item
 UPDATE dirty_cafe_sales
 SET Item = NULL -- Cột Item
@@ -65,6 +68,7 @@ SET Location = NULL
 WHERE Location IN ('ERROR', 'UNKNOWN', '')
 ```
 ***1.2. Tính toán số lượng Null trên tổng số dữ liệu***
+
 ```sql
 SELECT COUNT(*) AS total_rows_with_null
 FROM dirty_cafe_sales
@@ -88,3 +92,94 @@ WHERE Item IS NULL
    OR Location IS NULL
    OR Transaction_Date IS NULL;
 ```
+***2. Kiểm tra giá trị trùng lặp => thường là khóa chính***
+
+```sql
+SELECT Transaction_ID, COUNT(*) AS count
+FROM dirty_cafe_sales
+GROUP BY Transaction_ID
+HAVING COUNT(*) > 1;
+```
+***3. Chuyển hóa kiểu dữ liệu***
+
+```sql
+SELECT 
+    COLUMN_NAME,
+    DATA_TYPE,
+    CHARACTER_MAXIMUM_LENGTH,
+    IS_NULLABLE
+FROM INFORMATION_SCHEMA.COLUMNS
+WHERE TABLE_NAME = 'dirty_cafe_sales';
+```
+
+***4.Kiểm tra bất thường của dữ liệu và dữ liệu ngoại lai***
+
+***4.1. Tính các chỉ số thống kê (min, max, avg, stddev) và kiểm tra phân phối***
+
+```sql
+SELECT 
+    'Quantity' AS column_name,
+    MIN(Quantity) AS min_value,
+    MAX(Quantity) AS max_value,
+    AVG(CAST(Quantity AS FLOAT)) AS avg_value,
+    STDEV(CAST(Quantity AS FLOAT)) AS std_dev
+FROM dirty_cafe_sales
+WHERE Quantity IS NOT NULL
+UNION ALL
+SELECT 
+    'Price_Per_Unit' AS column_name,
+    MIN(Price_Per_Unit) AS min_value,
+    MAX(Price_Per_Unit) AS max_value,
+    AVG(Price_Per_Unit) AS avg_value,
+    STDEV(Price_Per_Unit) AS std_dev
+FROM dirty_cafe_sales
+WHERE Price_Per_Unit IS NOT NULL
+UNION ALL
+SELECT 
+    'Total_Spent' AS column_name,
+    MIN(Total_Spent) AS min_value,
+    MAX(Total_Spent) AS max_value,
+    AVG(Total_Spent) AS avg_value,
+    STDEV(Total_Spent) AS std_dev
+FROM dirty_cafe_sales
+WHERE Total_Spent IS NOT NULL;
+```
+***4.2. Xác định outlier bằng quy tắc IQR***
+
+```sql
+WITH stats AS (
+    SELECT 
+        PERCENTILE_CONT(0.25) WITHIN GROUP (ORDER BY Price_Per_Unit) over() AS Q1,
+        PERCENTILE_CONT(0.75) WITHIN GROUP (ORDER BY Price_Per_Unit) over() AS Q3
+    FROM dirty_cafe_sales
+)
+SELECT 
+    Price_Per_Unit
+FROM dirty_cafe_sales, stats
+WHERE Price_Per_Unit < (Q1 - 1.5 * (Q3 - Q1))
+   OR Price_Per_Unit > (Q3 + 1.5 * (Q3 - Q1)) 
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
