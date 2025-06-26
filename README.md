@@ -32,7 +32,7 @@ Quá trình xử lí dữ liệu gồm 4 bước sau:
 ```sql
 --Cột Item
 UPDATE dirty_cafe_sales
-SET Item = NULL -- Cột Item
+SET Item = NULL 
 WHERE Item IN ('ERROR', 'UNKNOWN', '')
 
 -- Cột Quantity 
