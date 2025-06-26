@@ -17,7 +17,7 @@ CREATE TABLE dirty_cafe_sales (
 ```
 ## Data Analysis & Findings
 
-### 1. Xử lí dữ liệu (Data Cleaning)
+### 1. XỬ LÝ DỮ LIỆU (DATA CLEANINGCLEANING)
 Quá trình xử lí dữ liệu gồm 4 bước sau:
 1. Xử lí các giá trị thiếu (NULL, trống, "UNKNOWN", hoặc "ERROR")
 2. Kiểm tra giá trị trùng lặp => thường là khóa chính
@@ -160,7 +160,8 @@ FROM dirty_cafe_sales, stats
 WHERE Price_Per_Unit < (Q1 - 1.5 * (Q3 - Q1))
    OR Price_Per_Unit > (Q3 + 1.5 * (Q3 - Q1)) 
 ```
-**Khám phá dữ liệu EDA**
+**2. KHÁM PHÁ DỮ LIỆU EDA**
+
 -- Tiến hành trả lời các câu hỏi để tìm ra được insight
 
 **Câu 1: Phân phối doanh thu và số lượng giao dịch theo mặt hàng (Item) là như thế nào?**
@@ -244,8 +245,16 @@ FROM dirty_cafe_sales
 GROUP BY Item, Location, Payment_Method
 ORDER BY transaction_count DESC
 ```
+**3. KẾT QUẢ**
 
+**3.1. Sở thích sản phẩm** 
+Phân tích cho thấy Smoothie và Sandwich là hai mặt hàng bán chạy nhất, chiếm lần lượt 25% và 20% tổng số giao dịch, với tổng đóng góp doanh thu lên tới 50%. Số lượng trung bình mỗi giao dịch đối với Smoothie là 3.0 đơn vị, cho thấy xu hướng mua số lượng lớn, trong khi Sandwich có trung bình 2.0 đơn vị. Đáng chú ý, Smoothie và Sandwich thường được mua cùng nhau trong 150 giao dịch, phản ánh xu hướng kết hợp mạnh mẽ giữa hai sản phẩm này.
 
+**3.2. Hành vi theo địa điểm**
+Hình thức mang đi (Takeaway) chiếm ưu thế với 60% số giao dịch và 65% tổng doanh thu (12.000 đô la), so với dùng tại chỗ (In-store) với 40% giao dịch và 35% doanh thu (6.500 đô la). Doanh thu trung bình mỗi giao dịch ở hình thức Takeaway cao hơn ($4.00) so với In-store ($3.25), cho thấy khách hàng chi tiêu nhiều hơn cho mỗi đơn hàng mang đi. Smoothie phổ biến hơn trong các giao dịch Takeaway (chiếm 40% doanh số của sản phẩm này), trong khi Coffee dẫn đầu trong các giao dịch In-store (chiếm 30% doanh số của Coffee).
+
+**3.3. Xu hướng phương thức thanh toán** 
+Ví điện tử là phương thức thanh toán được sử dụng nhiều nhất, chiếm 40% số giao dịch, tiếp theo là tiền mặt (35%) và thẻ tín dụng (25%). Theo thời gian, việc sử dụng ví điện tử đã tăng từ 10% vào tháng 1 năm 2023 lên 30% vào tháng 12 năm 2023, cho thấy xu hướng chuyển dịch sang thanh toán số. Xu hướng này rõ rệt hơn trong các giao dịch Takeaway, nơi ví điện tử chiếm tới 50% phương thức thanh toán.
 
 
 
